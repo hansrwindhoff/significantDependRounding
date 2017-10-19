@@ -1,9 +1,7 @@
 import * as Fraction from 'fraction.js'
 
-
-function getLastIntegerDigit(num: number) {
-  const numString = num.toString();
-  
+function getLastIntegerDigit(theNumber: number) {
+  const numString = theNumber.toString();  
   if (numString.length > 1) {
     const lastDigString = numString[numString.length - 1];
     lastDigString;
@@ -14,6 +12,7 @@ function getLastIntegerDigit(num: number) {
   }
 }
 
+// find the currently used decimal seperator, which depends on the locale of the environment
 function whatDecimalSeparator() {
   const n = 1.1;
   const localString = /^1(.+)1$/.exec(n.toLocaleString());
@@ -25,68 +24,65 @@ function whatDecimalSeparator() {
 }
 
 // defaults the position to half the significant length
-function roundUpAtSignificantPosition(num: number, position?: number) {
+function roundUpAtSignificantPosition(theNumberToBeRounded: number, positionInSignificant?: number) {
   const decimalDelimiter = whatDecimalSeparator() || '.';
   
-  num;
-  let numFrac = new Fraction(num);
-  numFrac;
-
+  theNumberToBeRounded;
+  let fractionalRepresentation = new Fraction(theNumberToBeRounded);
+  fractionalRepresentation;
   
-  let rounded = 42;
-  let counter = 0;
-  let flipper = 1;
-  if (num < 0) {
-    flipper = -1;
+  let roundedResult = 42;
+  let shiftCounter = 0;
+  let signFlipper = 1;
+  if (theNumberToBeRounded < 0) {
+    signFlipper = -1;
   }
   
-  numFrac = numFrac.abs();
-  if (numFrac.valueOf() < 1) {
-    while (numFrac.valueOf() < 1) {
-      numFrac = numFrac.mul(10);
-      counter++;
+  fractionalRepresentation = fractionalRepresentation.abs();
+  if (fractionalRepresentation.valueOf() < 1) {
+    while (fractionalRepresentation.valueOf() < 1) {
+      fractionalRepresentation = fractionalRepresentation.mul(10);
+      shiftCounter++;
     }
-  } else if (numFrac.valueOf() >= 10) {
-    while (numFrac.valueOf() >= 10) {
-      numFrac = numFrac.div(10);
-      counter--;
+  } else if (fractionalRepresentation.valueOf() >= 10) {
+    while (fractionalRepresentation.valueOf() >= 10) {
+      fractionalRepresentation = fractionalRepresentation.div(10);
+      shiftCounter--;
     }
   }
   // number is now x.xxxx...
-  if (!position) {
-    numFrac
-    let intDec = numFrac.valueOf()
-    intDec 
-    intDec = intDec.toString().split(decimalDelimiter);
-    intDec
-    const int = intDec[0];
-    const dec = (/^[0-9]*$/.exec(intDec[1])) ;
-    int;
-    dec;
-    const significant = (/^[0-9]*$/.exec((int || '') + (dec || '')) || [''])[0];
+  if (!positionInSignificant) {
+    fractionalRepresentation
+    let decimalRepresentation = fractionalRepresentation.valueOf()
+    decimalRepresentation 
+    const decimalRepresentationParts: string[] = decimalRepresentation.toString().split(decimalDelimiter);
+    decimalRepresentationParts
+    const integerPart = decimalRepresentationParts[0];
+    const decimalPart = (/^[0-9]*$/.exec(decimalRepresentationParts[1])) ;
+    integerPart;
+    decimalPart;
+    const significant = (/^[0-9]*$/.exec((integerPart || '') + (decimalPart || '')) || [''])[0];
     significant
-    position = parseInt((significant.toString().length / 2).toString());
-    position
+    positionInSignificant = parseInt((significant.toString().length / 2).toString());
+    positionInSignificant
   }
-  position;
+  positionInSignificant;
   
-  numFrac = numFrac.mul(Fraction(10).pow(position));
-  numFrac = numFrac.add(1); // always round up at the position selected
-  numFrac = numFrac.round(); // chop of any trailing digits
+  fractionalRepresentation = fractionalRepresentation.mul(Fraction(10).pow(positionInSignificant));
+  fractionalRepresentation = fractionalRepresentation.add(1); // always round up at the position selected
+  fractionalRepresentation = fractionalRepresentation.round(); // chop of any trailing digits
   // and we want a traling zero,
-  const lastDig = getLastIntegerDigit(numFrac.valueOf());
-  lastDig;
-  if (lastDig) {
+  const lastIntergerDigit = getLastIntegerDigit(fractionalRepresentation.valueOf());
+  lastIntergerDigit;
+  if (lastIntergerDigit) {
     // unless we already have one
-    numFrac = numFrac.add(10 - lastDig);
+    fractionalRepresentation = fractionalRepresentation.add(10 - lastIntergerDigit);
   }
-  numFrac = numFrac.mul(Fraction(10).pow(-(counter + position))).mul(flipper);
-  numFrac;
-  const fracVal = numFrac.valueOf();
-  fracVal;
-  rounded = fracVal;
-  rounded;
-  return rounded;
+  fractionalRepresentation = fractionalRepresentation.mul(Fraction(10).pow(-(shiftCounter + positionInSignificant))).mul(signFlipper);
+  fractionalRepresentation;
+  roundedResult = fractionalRepresentation.valueOf();
+  roundedResult;
+  return roundedResult;
 }
 
 
@@ -96,7 +92,7 @@ function roundUpAtSignificantPosition(num: number, position?: number) {
 
 
 
-
+// test cases
 
 let theNum = 0.1 + 0.2 ;
 theNum
@@ -106,73 +102,73 @@ theNum;
 result = roundUpAtSignificantPosition(theNum);
 result;
 
-result = roundUpAtSignificantPosition(10010);
-result;
-result = roundUpAtSignificantPosition(112411);
-result;
-result = roundUpAtSignificantPosition(10000, 0);
-result;
-result = roundUpAtSignificantPosition(10000, 4);
-result;
-result = roundUpAtSignificantPosition(10000, 5);
-result;
-result = roundUpAtSignificantPosition(10000);
-result;
-result = roundUpAtSignificantPosition(-10000);
-result;
-result = roundUpAtSignificantPosition(-10000, 1);
-result;
-result = roundUpAtSignificantPosition(-10000, 2);
-result;
-result = roundUpAtSignificantPosition(-10000, 3);
-result;
-result = roundUpAtSignificantPosition(-10000, 4);
-result;
+// result = roundUpAtSignificantPosition(10010);
+// result;
+// result = roundUpAtSignificantPosition(112411);
+// result;
+// result = roundUpAtSignificantPosition(10000, 0);
+// result;
+// result = roundUpAtSignificantPosition(10000, 4);
+// result;
+// result = roundUpAtSignificantPosition(10000, 5);
+// result;
+// result = roundUpAtSignificantPosition(10000);
+// result;
+// result = roundUpAtSignificantPosition(-10000);
+// result;
+// result = roundUpAtSignificantPosition(-10000, 1);
+// result;
+// result = roundUpAtSignificantPosition(-10000, 2);
+// result;
+// result = roundUpAtSignificantPosition(-10000, 3);
+// result;
+// result = roundUpAtSignificantPosition(-10000, 4);
+// result;
 
-result = roundUpAtSignificantPosition(0.004);
-result;
-result = roundUpAtSignificantPosition(0.004, 2);
-result;
-result = roundUpAtSignificantPosition(0.004, 3);
-result;
-result = roundUpAtSignificantPosition(0.004, 4);
-result;
-result = roundUpAtSignificantPosition(0.004, 5);
-result;
-result = roundUpAtSignificantPosition(0.004, 6);
-result;
-result = roundUpAtSignificantPosition(-0.004);
-result;
-result = roundUpAtSignificantPosition(-0.0044, 3);
-result;
-result = roundUpAtSignificantPosition(-0.004, 3);
-result;
-result = roundUpAtSignificantPosition(-0.004, 4);
-result;
-result = roundUpAtSignificantPosition(-0.004, 5);
-result;
+// result = roundUpAtSignificantPosition(0.004);
+// result;
+// result = roundUpAtSignificantPosition(0.004, 2);
+// result;
+// result = roundUpAtSignificantPosition(0.004, 3);
+// result;
+// result = roundUpAtSignificantPosition(0.004, 4);
+// result;
+// result = roundUpAtSignificantPosition(0.004, 5);
+// result;
+// result = roundUpAtSignificantPosition(0.004, 6);
+// result;
+// result = roundUpAtSignificantPosition(-0.004);
+// result;
+// result = roundUpAtSignificantPosition(-0.0044, 3);
+// result;
+// result = roundUpAtSignificantPosition(-0.004, 3);
+// result;
+// result = roundUpAtSignificantPosition(-0.004, 4);
+// result;
+// result = roundUpAtSignificantPosition(-0.004, 5);
+// result;
 
-result = roundUpAtSignificantPosition(99);
-result;
-result = roundUpAtSignificantPosition(29);
-result;
-result = roundUpAtSignificantPosition(29,3);
-result;
-result = roundUpAtSignificantPosition(10000,4);
-result;
-result = roundUpAtSignificantPosition(10000, -1);
-result;
-result = roundUpAtSignificantPosition(1);
-result;
+// result = roundUpAtSignificantPosition(99);
+// result;
+// result = roundUpAtSignificantPosition(29);
+// result;
+// result = roundUpAtSignificantPosition(29,3);
+// result;
+// result = roundUpAtSignificantPosition(10000,4);
+// result;
+// result = roundUpAtSignificantPosition(10000, -1);
+// result;
+// result = roundUpAtSignificantPosition(1);
+// result;
 
-result = roundUpAtSignificantPosition(1);
-result;
+// result = roundUpAtSignificantPosition(1);
+// result;
 
-result = roundUpAtSignificantPosition(1000.090999,3);
-result;
-result = roundUpAtSignificantPosition(1000.090999,4);
-result;
-result = roundUpAtSignificantPosition(1000.09099999292929,1);
-result;
-result = roundUpAtSignificantPosition(1000.099);
-result;
+// result = roundUpAtSignificantPosition(1000.090999,3);
+// result;
+// result = roundUpAtSignificantPosition(1000.090999,4);
+// result;
+// result = roundUpAtSignificantPosition(1000.09099999292929,1);
+// result;
+// result = roundUpAtSignificantPosition(1000.099);
+// result;
