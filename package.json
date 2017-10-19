@@ -1,13 +1,19 @@
 {
-  "name": "mantissabasedmax",
+  "name": "significantDependRounding",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p ."
-    
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@types/moment": "^2.13.0",
+    "@types/node": "^8.0.41",
+    "fraction.js": "^4.0.3",
+    "moment": "^2.19.1",
+    "num2fraction": "^1.2.2"
+  }
 }
